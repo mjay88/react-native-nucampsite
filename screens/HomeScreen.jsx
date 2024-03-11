@@ -23,7 +23,7 @@ const FeaturedItem = ({ item }) => {
 	return <View></View>;
 };
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
 	const [campsites, setCampsites] = useState(CAMPSITES);
 	const [promotions, setPromotions] = useState(PROMOTIONS);
 	const [partners, setPartners] = useState(PARTNERS);

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Platform } from "react-native";
+import { View, Platform, Button } from "react-native";
 import Constants from "expo-constants";
 import DirectoryScreen from "./DirectoryScreen";
 import CampsiteInfoScreen from "./CampsiteInfoScreen";
@@ -12,6 +12,7 @@ import ContactScreen from "./ContactScreen";
 const Drawer = createDrawerNavigator();
 
 const screenOptions = {
+	headerBackTitle: "Back",
 	headerStyle: {
 		backgroundColor: "#5637DD",
 	},
@@ -24,7 +25,10 @@ const HomeNavigator = () => {
 			<Stack.Screen
 				name="Home"
 				component={HomeScreen}
-				options={{ title: "Home" }}
+				options={{
+					title: "Home",
+					headerBackTitle: "Back",
+				}}
 			></Stack.Screen>
 		</Stack.Navigator>
 	);

@@ -1,12 +1,13 @@
-import { Text, View } from "react-native";
-import { Card } from "react-native-elements";
+import { Text, View, StyleSheet } from "react-native";
+import { Card, Icon } from "react-native-elements";
 
 import React from "react";
 
-const RenderCampsite = ({ campsite }) => {
+const RenderCampsite = (props) => {
+	const { campsite } = props;
 	if (campsite) {
 		return (
-			<Card containerStyle={{ padding: 0 }}>
+			<Card containerStyle={styles.cardContainer}>
 				<Card.Image source={campsite.image}>
 					<View style={{ justifyContent: "center", flex: 1 }}>
 						<Text
@@ -21,10 +22,30 @@ const RenderCampsite = ({ campsite }) => {
 					</View>
 				</Card.Image>
 				<Text style={{ margin: 20 }}>{campsite.description}</Text>
+				<Icon
+					name={props.isFavorite ? "heart" : "heart-o"}
+					type="font-awesome"
+					color="#f50"
+					raised
+					reversed
+					onPress={() =>
+						// props.isFavorite
+						// ? console.log("Already favorite"):
+						props.markFavorite()
+					}
+				></Icon>
 			</Card>
 		);
 	}
 	return <View></View>;
 };
+
+const styles = StyleSheet.create({
+	cardContainer: {
+		padding: 0,
+		margin: 0,
+		marginBottom: 0,
+	},
+});
 
 export default RenderCampsite;
