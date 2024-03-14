@@ -3,6 +3,7 @@ import { campsitesReducer } from "../features/campsites/campsiteSlice";
 import { commentsReducer } from "../features/comments/commentsSlice";
 import { partnersReducer } from "../features/partners/partnersSlice";
 import { promotionsReducer } from "../features/promotions/promotionsSlice";
+import { favoritesReducer } from "../features/favorites/favoritesSlice";
 //combine each reducer from the slice files into one reducer
 export const store = configureStore({
 	reducer: {
@@ -10,5 +11,6 @@ export const store = configureStore({
 		comments: commentsReducer,
 		partners: partnersReducer,
 		promotions: promotionsReducer,
+		favorites: favoritesReducer,
 	},
 });

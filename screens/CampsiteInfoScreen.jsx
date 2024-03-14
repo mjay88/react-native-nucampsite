@@ -1,11 +1,14 @@
-import { useState } from "react";
 import { FlatList, View, Text, StyleSheet } from "react-native";
 import RenderCampsite from "../features/campsites/RenderCampsite";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleFavorite } from "../features/favorites/favoritesSlice";
+
 const CampsiteInfoScreen = ({ route }) => {
 	const { campsite } = route.params;
 	const comments = useSelector((state) => state.comments);
-	const [favorite, setFavorite] = useState(false);
+	// const [favorite, setFavorite] = useState(false);
+	const favorites = useSelector((state) => state.favorites);
+	const dispatch = useDispatch();
 
 	const renderCommentItem = ({ item }) => {
 		return (
@@ -32,8 +35,8 @@ const CampsiteInfoScreen = ({ route }) => {
 				<>
 					<RenderCampsite
 						campsite={campsite}
-						isFavorite={favorite}
-						markFavorite={() => setFavorite((favorite) => !favorite)}
+						isFavorite={favorites.includes(campsite.id)}
+						markFavorite={() => dispatch(toggleFavorite(campsite.id))}
 					/>
 					<Text style={styles.commentsTitle}>Comments</Text>
 				</>
