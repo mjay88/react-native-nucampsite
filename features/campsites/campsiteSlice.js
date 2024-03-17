@@ -9,6 +9,7 @@ export const fetchCampsites = createAsyncThunk(
 			return Promise.reject("Unable to fetch, status: " + response.status);
 		}
 		const data = await response.json();
+		// console.log(data);
 		return data;
 	}
 );
