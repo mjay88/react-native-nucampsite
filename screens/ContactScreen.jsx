@@ -31,7 +31,7 @@ const ContactScreen = () => {
 							<Icon
 								name="envelope-o"
 								type="font-awesome"
-								color="fff"
+								color="#fff"
 								iconStyle={{ marginRight: 10 }}
 							/>
 						}

@@ -12,6 +12,7 @@ import {
 	DrawerItemList,
 	DrawerContentScrollView,
 } from "@react-navigation/drawer";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/core";
 import HomeScreen from "./HomeScreen";
 import AboutScreen from "./AboutScreen";
 import ContactScreen from "./ContactScreen";
@@ -151,10 +152,15 @@ const LoginNavigator = () => {
 			<Stack.Screen
 				name="Login"
 				component={LoginScreen}
-				options={({ navigation }) => ({
+				options={({ navigation, route }) => ({
+					headerTitle: getFocusedRouteNameFromRoute(route),
 					headerLeft: () => (
 						<Icon
-							name="sign-in"
+							name={
+								getFocusedRouteNameFromRoute(route) === "Register"
+									? "user-plus"
+									: "sign-in"
+							}
 							type="font-awesome"
 							iconStyle={styles.stackIcon}
 							onPress={() => navigation.toggleDrawer()}
