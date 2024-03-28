@@ -243,7 +243,10 @@ const LoginScreen = () => {
 	};
 
 	return (
-		<Tab.Navigator tabBarOptions={tabBarOptions}>
+		<Tab.Navigator
+			tabBarOptions={tabBarOptions}
+			screenOptions={{ headerShown: false }}
+		>
 			<Tab.Screen
 				name="Login"
 				component={LoginTab}

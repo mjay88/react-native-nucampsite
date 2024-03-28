@@ -1,5 +1,14 @@
 import { useEffect } from "react";
-import { View, Platform, Button, StyleSheet, Image, Text } from "react-native";
+import {
+	View,
+	Platform,
+	Button,
+	StyleSheet,
+	Image,
+	Text,
+	Alert,
+	ToastAndroid,
+} from "react-native";
 import { Icon } from "react-native-elements";
 import Constants from "expo-constants";
 import DirectoryScreen from "./DirectoryScreen";
@@ -23,6 +32,7 @@ import { fetchPartners } from "../features/partners/partnersSlice.js";
 import { fetchCampsites } from "../features/campsites/campsiteSlice.js";
 import { fetchPromotions } from "../features/promotions/promotionsSlice.js";
 import { fetchComments } from "../features/comments/commentsSlice.js";
+import NetInfo from "@react-native-community/netinfo";
 
 const Drawer = createDrawerNavigator();
 
@@ -226,6 +236,44 @@ const Main = () => {
 		dispatch(fetchComments());
 	}, [dispatch]);
 
+	useEffect(() => {
+		NetInfo.fetch().then((connectionInfo) => {
+			Platform.OS === "ios"
+				? Alert.alert("Initial Netowrk Connectivity Type:", connectionInfo.type)
+				: ToastAndroid.show(
+						"Initial Network Connectivity Type: " + connectionInfo.type,
+						ToastAndroid.LONG
+				  );
+		});
+
+		const unsubscribeNetInfo = NetInfo.addEventListener((connectionInfo) => {
+			handleConnectivityChange(connectionInfo);
+		});
+
+		return unsubscribeNetInfo;
+	}, []);
+
+	const handleConnectivityChange = (connectionInfo) => {
+		let connectionMsg = " You are now connected to an active network.";
+		switch (connectionInfo.type) {
+			case "none":
+				connectionMsg = "No network connection is active";
+				break;
+			case "unknown":
+				connectionMsg = "The network connection state is now unknown";
+				break;
+			case "cellular":
+				connectionMsg = "You are now connected to a cellular network";
+				break;
+			case "wifi":
+				connectionMsg = "You are now connected to a WiFi network";
+				break;
+		}
+		Platform.OS === "ios"
+			? Alert.alert("Connection change:", connectionMsg)
+			: ToastAndroid.show(connectionMsg, ToastAndroid.LONG);
+	};
+
 	return (
 		<View
 			style={{
@@ -237,6 +285,7 @@ const Main = () => {
 				initialRouteName="Home"
 				drawerContent={CustomDrawerContent}
 				drawerStyle={{ backgroundColor: "#CEC8FF" }}
+				screenOptions={{ headerShown: false }}
 			>
 				<Drawer.Screen
 					name="Login"
