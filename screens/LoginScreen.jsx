@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as ImagePicker from "expo-image-picker";
 import { baseUrl } from "../shared/baseUrl";
 import logo from "../assets/images/logo.png";
+import * as ImageManipulator from "expo-image-manipulator";
 
 const LoginTab = ({ navigation }) => {
 	const [username, setUsername] = useState("");
@@ -109,7 +110,7 @@ const RegisterTab = () => {
 	const [email, setEmail] = useState("");
 	const [remember, setRemember] = useState("");
 	const [imageUrl, setImageUrl] = useState(baseUrl + "images/logo.png");
-
+	console.log(imageUrl, "imageUrl");
 	const handleRegister = () => {
 		const userInfo = {
 			username,
@@ -144,20 +145,52 @@ const RegisterTab = () => {
 			});
 			if (capturedImage.assets) {
 				console.log(capturedImage.assets[0]);
-				setImageUrl(capturedImage.assets[0].uri);
+				setImageUrl(await processedImage(capturedImage.assets[0].uri));
 			}
 		}
+	};
+	const getImageFromGallery = async () => {
+		const mediaLibraryPermissions =
+			await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+		if (mediaLibraryPermissions.status === "granted") {
+			const capturedImage = await ImagePicker.launchImageLibraryAsync({
+				allowsEditing: true,
+				aspect: [1, 1],
+			});
+			if (capturedImage.assets) {
+				console.log(capturedImage.assets[0], "inside getImageFromGallery");
+				setImageUrl(await processedImage(capturedImage.assets[0].uri));
+			}
+		}
+	};
+	const processedImage = async (imageUrl) => {
+		const manipResult = await ImageManipulator.manipulateAsync(
+			imageUrl,
+			[
+				{
+					resize: {
+						width: 400,
+					},
+				},
+			],
+			{ compress: 1, format: ImageManipulator.SaveFormat.PNG }
+		);
+		console.log(manipResult.uri, "manipresult");
+		// setImageUrl(manipResult);
+		return manipResult;
 	};
 
 	return (
 		<ScrollView>
 			<View style={styles.imageContainer}>
 				<Image
-					source={{ uri: imageUrl }}
+					source={{ uri: imageUrl?.uri || imageUrl }}
 					loadingIndicatorSource={logo}
 					style={styles.image}
 				/>
 				<Button title="Camera" onPress={getImageFromCamera} />
+				<Button title="Gallery" onPress={getImageFromGallery} />
 			</View>
 			<View style={styles.container}>
 				<Input
